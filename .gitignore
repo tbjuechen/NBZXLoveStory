@@ -168,3 +168,8 @@ main.exe
 
 .vscode/
 log.*
+
+/game/saves/
+/game/cache/
+
+*.txt
