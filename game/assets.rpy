@@ -14,12 +14,12 @@ image bg4s3_1b = Transform("images/backgrounds/stairwell_dusk.png", size=(1920, 
 image bg4e2 = Transform("images/backgrounds/stairwell_dusk.png", size=(1920, 1080))
 image bg4e3 = Transform("images/backgrounds/stairwell_dusk.png", size=(1920, 1080))
 
-# 临时人物标记，确保在正式立绘完成前项目仍可完整运行。
-image Snake = Text("蛇哥\n（立绘待导入）", size=48, color="#ffffff", text_align=0.5, outlines=[(3, "#244a73", 0, 0)])
-image Crab = Text("蟹宝王\n（立绘待导入）", size=48, color="#ffffff", text_align=0.5, outlines=[(3, "#b34f68", 0, 0)])
-image CBro = Text("超哥\n（立绘待导入）", size=48, color="#ffffff", text_align=0.5, outlines=[(3, "#5a477d", 0, 0)])
-image Turtle = Text("龟\n（立绘待导入）", size=48, color="#ffffff", text_align=0.5, outlines=[(3, "#39714d", 0, 0)])
-image Cannon = Text("炮神\n（立绘待导入）", size=48, color="#ffffff", text_align=0.5, outlines=[(3, "#87522f", 0, 0)])
+# 正式人物立绘。缩放比例按设定身高校准：蛇哥 180+，蟹宝王 158。
+image Snake = Transform("images/characters/snake.png", zoom=0.58)
+image Crab = Transform("images/characters/crab.png", zoom=0.555)
+image CBro = Transform("images/characters/cbro.png", zoom=0.54)
+image Turtle = Transform("images/characters/turtle.png", zoom=0.55)
+image Cannon = Transform("images/characters/cannon.png", zoom=0.58)
 
 init python:
     def crab_rank(value):
