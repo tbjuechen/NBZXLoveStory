@@ -204,7 +204,7 @@ screen choice(items):
 
     vbox:
         for i in items:
-            textbutton i.caption action i.action
+            textbutton i.caption action i.action activate_sound "audio/sfx/choice.wav"
 
 
 style choice_vbox is vbox

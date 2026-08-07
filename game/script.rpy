@@ -8,6 +8,7 @@ default s2_choice = ""
 default brought_snack = False
 default math_trial_correct = False
 default unlocked_events = []
+default event_count = 0
 
 
 label Aside(text):
@@ -26,6 +27,8 @@ label Aside(text):
 label EventUnlock(event_name):
     if event_name not in unlocked_events:
         $ unlocked_events.append(event_name)
+        $ event_count += 1
+        play sound "audio/sfx/event_unlock.wav" volume 0.75
         show text "{size=28}{color=#ffcfdf}◆ 回忆事件解锁{/color}{/size}\n{size=46}{color=#ffffff}[event_name]{/color}{/size}" at truecenter
         with dissolve
         pause 1.4
@@ -38,9 +41,11 @@ label AffectionNotice(who, amount, reason):
     if amount > 0:
         $ change_text = "+" + str(amount)
         $ change_color = "#ffb8c8"
+        play sound "audio/sfx/affection_up.wav" volume 0.65
     elif amount < 0:
         $ change_text = str(amount)
         $ change_color = "#9fc6ff"
+        play sound "audio/sfx/affection_down.wav" volume 0.65
     else:
         $ change_text = "不变"
         $ change_color = "#ffffff"
@@ -54,9 +59,10 @@ label AffectionNotice(who, amount, reason):
 
 label EndingCard(title, subtitle):
     hide screen relationship_status
+    stop music fadeout 1.5
     scene black
     with dissolve
-    show text "{size=64}{color=#ffffff}[title]{/color}{/size}\n\n{size=30}{color=#b8c7dc}[subtitle]{/color}{/size}\n\n{size=22}{color=#7f91a8}解锁事件：[len(unlocked_events)]/[len(event_catalog)]{/color}{/size}" at truecenter
+    show text "{size=64}{color=#ffffff}[title]{/color}{/size}\n\n{size=30}{color=#b8c7dc}[subtitle]{/color}{/size}\n\n{size=22}{color=#7f91a8}解锁事件：[event_count]/[event_total]{/color}{/size}" at truecenter
     with dissolve
     pause 3.0
     hide text
@@ -75,14 +81,17 @@ label start:
     $ brought_snack = False
     $ math_trial_correct = False
     $ unlocked_events = []
+    $ event_count = 0
     show screen relationship_status
+    play music "audio/bgm/campus_afterglow.wav" fadein 1.5 volume 0.48
+    play sound "audio/sfx/school_bell.wav" volume 0.60
 
     call Aside("数学学考模拟，第一考场")
     scene bg
     with dissolve
 
     show Snake at center
-    Snake "真是轻轻又松松，解析几何压轴题4±2√3和0。"
+    Snake "真是轻轻又松松，解析几何压轴题答案是4正负2倍根号3，还有0。"
     hide Snake
 
     show Crab at center
@@ -105,7 +114,7 @@ label S1:
     menu:
         "向数学天花板核对最后一题":
             show Snake at center
-            Snake "超哥，最后一题是不是4±2√3和0？"
+            Snake "超哥，最后一题是不是4正负2倍根号3，还有0？"
             hide Snake
             show CBro at center
             CBro "你真强。答案对了，但人生大题只写答案不给过程，通常要扣分。"
@@ -142,13 +151,14 @@ label S1:
 label MathTrial:
     scene bg4s1
     with dissolve
+    play music "audio/bgm/math_oracle.wav" fadeout 0.6 fadein 0.8 volume 0.48
     show CBro at center
     CBro "等等。既然你敢在我面前讨论数学，我需要确认你不是答案背诵型选手。"
     hide CBro
     "超哥从校服口袋里掏出一块便携式黑板。"
     "没有人知道一块一米二宽的黑板为什么能装进校服口袋。数学天花板附近的空间结构可能并不服从欧氏几何。"
 
-    show text "{size=38}{color=#ffffff}超哥封神试炼{/color}{/size}\n\n{size=34}{color=#ffecb8}求 7{sup}(7{sup}7{/sup}){/sup} 的末三位。{/color}{/size}\n\n{size=24}{color=#c6d4e5}禁止使用计算器，允许使用上一世的记忆。{/color}{/size}" at truecenter
+    show text "{size=38}{color=#ffffff}超哥封神试炼{/color}{/size}\n\n{size=34}{color=#ffecb8}求 7^(7^7) 的末三位。{/color}{/size}\n\n{size=24}{color=#c6d4e5}禁止使用计算器，允许使用上一世的记忆。{/color}{/size}" at truecenter
     with dissolve
     pause 1.5
     hide text
@@ -201,6 +211,7 @@ label MathTrial:
 
 
 label S2:
+    play music "audio/bgm/campus_afterglow.wav" fadeout 0.6 fadein 0.8 volume 0.48
     call Aside("蛇哥去了一趟厕所，和好兄弟林诗谕在走廊聊完，出来时又看到了蟹宝王")
     scene bg4s2
     with dissolve
@@ -348,6 +359,7 @@ label S3:
             $ cannon_affection += 10
             scene bg4court
             with dissolve
+            play sound "audio/sfx/basketball.wav" volume 0.80
             "夕阳把篮筐照成橙色。蛇哥投进了球，也把二楼的约定投出了记忆。"
             call Aside("两个人打球打到了六点")
             if s2_choice == "show_off":
@@ -462,6 +474,7 @@ label S4:
 
 
 label S5_turtle:
+    play music "audio/bgm/dusk_tension.wav" fadeout 0.8 fadein 1.0 volume 0.45
     "两人刚翻开书，一个身影从楼梯口缓缓升起。"
     show Turtle at center
     Turtle "蟹，我给你买了奶茶。蛇这种只会数学的冷血动物，不懂怎么照顾人。"
@@ -471,6 +484,7 @@ label S5_turtle:
     menu:
         "不替蟹宝王回答，让她自己处理":
             show Crab at center
+            play sound "audio/sfx/crab_power.wav" volume 0.70
             Crab "谢谢，但不用了。我和蛇哥在复习，请不要打扰我们。"
             hide Crab
             show Snake at center
@@ -517,6 +531,7 @@ label S5_turtle:
 
 
 label S6_study:
+    play music "audio/bgm/campus_afterglow.wav" fadeout 0.8 fadein 1.0 volume 0.45
     call Aside("龟离开后，二楼终于恢复安静。语文和数学准备进行第一次正式会谈")
     scene bg4s4
     with dissolve
@@ -634,6 +649,7 @@ label S6_meta:
 
 
 label S7_after_exam:
+    play sound "audio/sfx/school_bell.wav" volume 0.55
     call Aside("一周后，学考结束。没有人知道成绩，但所有人都假装自己已经稳了")
     scene bg4s1
     with dissolve
@@ -669,7 +685,7 @@ label S7_after_exam:
             $ crab_affection -= 10
             call AffectionNotice("蟹宝王", -10, "关键时刻再次选择了标准答案")
 
-    if crab_affection >= 120 and promise_points >= 3 and honesty_points >= 3 and len(unlocked_events) >= 6:
+    if crab_affection >= 120 and promise_points >= 3 and honesty_points >= 3 and event_count >= 6:
         jump end_true
     elif crab_affection >= 100 and promise_points >= 2:
         jump end_good
@@ -695,7 +711,7 @@ label end_true:
     Snake "那我申请把这道题写一辈子。"
     hide Snake
     call EventUnlock("学考之后")
-    call EndingCard("真结局 · 超纲答案", "数学有唯一答案，但喜欢你这件事可以有无数种证明。")
+    call EndingCard("真结局：超纲答案", "数学有唯一答案，但喜欢你这件事可以有无数种证明。")
     return
 
 
@@ -709,7 +725,7 @@ label end_good:
     Snake "好。这次我会把过程也写完整。"
     hide Snake
     call EventUnlock("学考之后")
-    call EndingCard("好结局 · 晚霞与约定", "有些答案不在试卷上，但也值得认真写下。")
+    call EndingCard("好结局：晚霞与约定", "有些答案不在试卷上，但也值得认真写下。")
     return
 
 
@@ -725,7 +741,7 @@ label end_reconcile:
     show Crab at center
     Crab "看你表现。"
     hide Crab
-    call EndingCard("普通结局 · 重新起笔", "关系没有标准答案，重要的是愿意认真改正。")
+    call EndingCard("普通结局：重新起笔", "关系没有标准答案，重要的是愿意认真改正。")
     return
 
 
@@ -734,21 +750,23 @@ label end_drift:
     with dissolve
     "蛇哥和蟹宝王一起走出了教学楼，却谁也没有提出下一次见面。"
     "他们没有争吵，只是逐渐变成了两条方向相近、距离不再缩短的直线。"
-    call EndingCard("遗憾结局 · 平行走廊", "不是所有错过都会有巨响，有些只是没有下一句。")
+    call EndingCard("遗憾结局：平行走廊", "不是所有错过都会有巨响，有些只是没有下一句。")
     return
 
 
 label end1:
+    play music "audio/bgm/dusk_tension.wav" fadeout 0.6 fadein 0.8 volume 0.44
     scene bg4e1
     with dissolve
     call Aside("蟹宝王一个人在二楼边背书边哭。晚自习快开始时，她看见蛇哥和炮神抱着篮球回来，终于彻底失望")
     $ crab_affection = 0
     call AffectionNotice("蟹宝王", -99, "好感度归零")
-    call EndingCard("坏结局 · 数学会陪你", "赢下了压轴题，却弄丢了更重要的约定。")
+    call EndingCard("坏结局：数学会陪你", "赢下了压轴题，却弄丢了更重要的约定。")
     return
 
 
 label s3_1_B:
+    play music "audio/bgm/dusk_tension.wav" fadeout 0.6 fadein 0.8 volume 0.44
     scene bg4s3_1b
     with dissolve
     call Aside("蟹宝王晚饭只吃了一个面包，在二楼一直等到天黑。看到蛇哥和炮神抱着篮球回来，她终于拦住了两个人")
@@ -787,7 +805,7 @@ label end2:
     Crab "为什么你每次都这样！这就是你说的一辈子对我好吗？再也不理你了。"
     hide Crab
     $ crab_affection = 0
-    call EndingCard("坏结局 · 被忘记的约定", "坦白来得太迟，失望已经等了太久。")
+    call EndingCard("坏结局：被忘记的约定", "坦白来得太迟，失望已经等了太久。")
     return
 
 
@@ -803,7 +821,7 @@ label end3:
     show Turtle at center
     Turtle "蛇，你怎么可以这样对蟹！"
     hide Turtle
-    call EndingCard("坏结局 · 拙劣借口", "一次失约已经很糟，谎言让它再也无法挽回。")
+    call EndingCard("坏结局：拙劣借口", "一次失约已经很糟，谎言让它再也无法挽回。")
     return
 
 
@@ -817,5 +835,5 @@ label end_bro:
     Snake "没有吧。"
     hide Snake
     "这一刻，炮神第一次意识到：有些助攻不是把球传出去，而是提醒兄弟别把人生打成单机模式。"
-    call EndingCard("兄弟结局 · 百分大战", "炮神赢了球，蛇哥暂时输掉了恋爱主线。")
+    call EndingCard("兄弟结局：百分大战", "炮神赢了球，蛇哥暂时输掉了恋爱主线。")
     return

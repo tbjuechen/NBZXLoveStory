@@ -15,11 +15,11 @@ image bg4e2 = Transform("images/backgrounds/stairwell_dusk.png", size=(1920, 108
 image bg4e3 = Transform("images/backgrounds/stairwell_dusk.png", size=(1920, 1080))
 
 # 正式人物立绘。缩放比例按设定身高校准：蛇哥 180+，蟹宝王 158。
-image Snake = Transform("images/characters/snake.png", zoom=0.58)
-image Crab = Transform("images/characters/crab.png", zoom=0.555)
-image CBro = Transform("images/characters/cbro.png", zoom=0.54)
-image Turtle = Transform("images/characters/turtle.png", zoom=0.55)
-image Cannon = Transform("images/characters/cannon.png", zoom=0.58)
+image Snake = Transform("images/characters/snake.png", zoom=0.64)
+image Crab = Transform("images/characters/crab.png", zoom=0.67)
+image CBro = Transform("images/characters/cbro.png", zoom=0.59)
+image Turtle = Transform("images/characters/turtle.png", zoom=0.62)
+image Cannon = Transform("images/characters/cannon.png", zoom=0.68)
 
 init python:
     def crab_rank(value):
@@ -50,6 +50,8 @@ define event_catalog = [
     ("学考之后", "试卷之外的约定正式生效。"),
 ]
 
+define event_total = 11
+
 
 screen relationship_status():
     zorder 90
@@ -63,11 +65,11 @@ screen relationship_status():
         vbox:
             spacing 3
             text "关系面板" size 24 color "#ffffff" xalign 0.5
-            text "蟹宝王  [crab_affection] · [crab_rank(crab_affection)]" size 20 color "#ffb8c8"
+            text "蟹宝王  [crab_affection] | [crab_rank(crab_affection)]" size 20 color "#ffb8c8"
             text "超哥  [cbro_affection]" size 22 color "#cbb8ff"
             text "炮神  [cannon_affection]" size 22 color "#ffd0a8"
             text "承诺  [promise_points]    坦诚  [honesty_points]" size 19 color "#b8e3ff"
-            textbutton "回忆事件  [len(unlocked_events)]/[len(event_catalog)]":
+            textbutton "回忆事件  [event_count]/[event_total]":
                 xalign 0.5
                 text_size 18
                 action Show("event_gallery")
@@ -93,10 +95,10 @@ screen event_gallery():
 
             for event_name, event_desc in event_catalog:
                 if event_name in unlocked_events:
-                    text "◆ [event_name]" size 25 color "#ffcfdf"
+                    text "已解锁：[event_name]" size 25 color "#ffcfdf"
                     text "　[event_desc]" size 19 color "#d8e2ef"
                 else:
-                    text "◇ 尚未解锁" size 23 color "#697789"
+                    text "尚未解锁" size 23 color "#697789"
 
             textbutton "返回":
                 xalign 0.5
